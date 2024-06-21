@@ -191,12 +191,12 @@ async function run() {
             res.send(result)
         })
         //get my article
-        app.get('/my-articles/:email', verifyToken, async (req, res) => {
-            const email = req.params.email;
-            const query = { 'author.email': email }
-            const result = await articleCollection.find(query).toArray()
-            res.send(result)
-        })
+        // app.get('/my-articles/:email', verifyToken, async (req, res) => {
+        //     const email = req.params.email;
+        //     const query = { 'author.email': email }
+        //     const result = await articleCollection.find(query).toArray()
+        //     res.send(result)
+        // })
         //save a subscribe data in db
         app.post('/subscribe', async (req, res) => {
             const subscribeInfo = req.body
