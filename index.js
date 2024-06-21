@@ -173,12 +173,12 @@ async function run() {
             res.send(result)
         })
         //delete an article from db
-        app.delete('/article/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: new ObjectId(id) }
-            const result = await articleCollection.deleteOne(query)
-            res.send(result)
-        })
+        // app.delete('/article/:id', async (req, res) => {
+        //     const id = req.params.id;
+        //     const query = { _id: new ObjectId(id) }
+        //     const result = await articleCollection.deleteOne(query)
+        //     res.send(result)
+        // })
         // update article data
         app.put('/article/update/:id', verifyToken, async (req, res) => {
             const id = req.params.id
