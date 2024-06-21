@@ -156,12 +156,12 @@ async function run() {
         //update article status
         app.patch('/article/:id', async (req, res) => {
             const id = req.params.id;
-            const status = req.body;
-            const isPremium = req.body
-            const query = { _id: new ObjectId(id) }
-            const updateDoc = {
-                $set: { ...status, ...isPremium }
-            }
+            // const status = req.body;
+            // const isPremium = req.body
+            // const query = { _id: new ObjectId(id) }
+            // const updateDoc = {
+            //     $set: { ...status, ...isPremium }
+            // }
             const result = await articleCollection.updateOne(query, updateDoc)
             res.send(result)
         })
