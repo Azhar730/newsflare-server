@@ -131,18 +131,18 @@ async function run() {
             res.send(result)
         })
         //save a article data in db
-        // app.post('/article', async (req, res) => {
-        //     const articleInfo = req.body
-        //     const result = await articleCollection.insertOne(articleInfo)
-        //     res.send(result)
-        // })
+        app.post('/article', async (req, res) => {
+            const articleInfo = req.body
+            const result = await articleCollection.insertOne(articleInfo)
+            res.send(result)
+        })
         //get all article data from db
         app.get('/article', async (req, res) => {
             const result = await articleCollection.find().toArray()
             res.send(result)
         })
 
-        // Get all foods data from db for search & sort
+        // Get all article data from db for search & sort
         app.get('/allArticle', async (req, res) => {
             const search = req.query.search
             let query = {
