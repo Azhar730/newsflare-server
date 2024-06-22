@@ -8,7 +8,11 @@ require('dotenv').config()
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const port = process.env.PORT || 5000
 
-app.use(cors())
+app.use(cors({
+    origin: [
+      "http://localhost:5173"
+    ]
+  }))
 app.use(express.json())
 
 
@@ -30,6 +34,7 @@ async function run() {
         const publisherCollection = db.collection("publishers")
         const articleCollection = db.collection("articles")
         const subscribeCollection = db.collection("subscribe")
+        const paymentCollection = db.collection("payment")
 
         //jwt related apis
         app.post('/jwt', async (req, res) => {
@@ -208,8 +213,6 @@ async function run() {
         app.post('/create-payment-intent', async (req, res) => {
             const { price } = req.body;
             const amount = parseInt(price * 100);
-            console.log(amount, 'amount inside the intent')
-
             const paymentIntent = await stripe.paymentIntents.create({
                 amount,
                 currency: 'usd',
@@ -225,14 +228,7 @@ async function run() {
         app.post('/payments', async (req, res) => {
             const payment = req.body;
             const paymentResult = await paymentCollection.insertOne(payment);
-            //  carefully delete each item from the cart
-            const query = {
-                _id: {
-                    $in: payment.cartIds.map(id => new ObjectId(id))
-                }
-            };
-            const deleteResult = await cartCollection.deleteMany(query);
-            res.send({ paymentResult, deleteResult });
+            res.send({ paymentResult });
         })
         // get payment history from db
         app.get('/payments/:email', verifyToken, async (req, res) => {
@@ -243,6 +239,16 @@ async function run() {
             const result = await paymentCollection.find(query).toArray()
             res.send(result)
         })
+
+        //stats or analytics
+    app.get('/home-stats', async (req, res) => {
+        const users = await userCollection.estimatedDocumentCount()
+        const premiumUsers = await paymentCollection.estimatedDocumentCount()
+        const normalUsers = users-premiumUsers
+        res.send({
+          users, premiumUsers,normalUsers
+        })
+      })
 
         // using aggregate pipeline
         app.get('/order-stats', async (req, res) => {
