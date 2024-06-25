@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000
 
 app.use(cors({
     origin: [
-      "http://localhost:5173"
+      "http://localhost:5173",'https://transcendent-llama-25ee09.netlify.app'
     ]
   }))
 app.use(express.json())
@@ -97,7 +97,7 @@ async function run() {
             res.send(result)
         })
         //check admin or not
-        app.get('/users/admin/:email', verifyToken, verifyAdmin, async (req, res) => {
+        app.get('/users/admin/:email', verifyToken, async (req, res) => {
             const email = req.params.email
             if (email !== req.decoded.email) {
                 return res.status(403).send({ message: "forbidden access" })
